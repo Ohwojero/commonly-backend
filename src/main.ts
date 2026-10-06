@@ -16,7 +16,18 @@ async function bootstrap() {
   app.useBodyParser('urlencoded', { extended: true, limit: '10mb' })
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://commonly.vercel.app'],
+    origin: (origin, callback) => {
+      // Allow requests with no origin, localhost, or any vercel deployment
+      if (
+        !origin ||
+        origin.includes('localhost') ||
+        origin.endsWith('.vercel.app') ||
+        (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL)
+      ) {
+        return callback(null, true)
+      }
+      return callback(null, true)
+    },
     credentials: true,
   })
 
