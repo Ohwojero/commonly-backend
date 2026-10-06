@@ -15,7 +15,7 @@ const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   entities: [Category, Subcategory, Product, User, Save, ActivityLog],
   synchronize: true,
-  ssl: false,
+  ssl: process.env.DATABASE_URL?.includes('supabase.co') ? { rejectUnauthorized: false } : false,
 })
 
 async function seed() {
