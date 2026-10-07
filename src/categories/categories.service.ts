@@ -1,5 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
+import { randomUUID } from 'node:crypto'
 import { Repository } from 'typeorm'
 import { Category } from './category.entity'
 import { Subcategory } from './subcategory.entity'
@@ -14,7 +16,53 @@ export class CategoriesService {
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
     @InjectRepository(Subcategory) private subcategoryRepo: Repository<Subcategory>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
+    private config: ConfigService,
   ) {}
+
+  async uploadImage(dto: { fileName: string; contentType: string; data: string }) {
+    const allowedTypes: Record<string, string> = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+      'image/gif': 'gif',
+      'image/avif': 'avif',
+    }
+    const extension = allowedTypes[dto.contentType]
+    if (!extension || typeof dto.data !== 'string') {
+      throw new BadRequestException('Choose a JPG, PNG, WebP, GIF, or AVIF image.')
+    }
+
+    const base64 = dto.data.replace(/^data:[^;]+;base64,/, '')
+    const image = Buffer.from(base64, 'base64')
+    if (!image.length || image.length > 5 * 1024 * 1024) {
+      throw new BadRequestException('Images must be 5 MB or smaller.')
+    }
+
+    const supabaseUrl = this.config.get<string>('SUPABASE_URL')?.replace(/\/$/, '')
+    const serviceKey = this.config.get<string>('SUPABASE_SERVICE_ROLE_KEY')
+    if (!supabaseUrl || !serviceKey) {
+      throw new InternalServerErrorException('Image storage is not configured on the API.')
+    }
+
+    const filePath = `admin/${randomUUID()}.${extension}`
+    const bucket = 'commonlyimages'
+    const response = await fetch(`${supabaseUrl}/storage/v1/object/${bucket}/${filePath}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${serviceKey}`,
+        apikey: serviceKey,
+        'Content-Type': dto.contentType,
+        'x-upsert': 'false',
+      },
+      body: image,
+    })
+
+    if (!response.ok) {
+      throw new BadRequestException('Supabase Storage rejected the image upload. Check the bucket and service role configuration.')
+    }
+
+    return { url: `${supabaseUrl}/storage/v1/object/public/${bucket}/${filePath}` }
+  }
 
   findAll() {
     return this.categoryRepo.find({ relations: ['subcategories'] })

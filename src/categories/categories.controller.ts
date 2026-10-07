@@ -18,6 +18,13 @@ export class CategoriesController {
     return this.service.getAllMedia()
   }
 
+  @Post('media/upload')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  uploadImage(@Body() dto: { fileName: string; contentType: string; data: string }) {
+    return this.service.uploadImage(dto)
+  }
+
   @Get(':slug')
   findOne(@Param('slug') slug: string) {
     return this.service.findBySlug(slug)
