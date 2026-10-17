@@ -27,7 +27,7 @@ import { ReviewsModule } from './reviews/reviews.module'
         entities: [User, Product, Category, Subcategory, Save, ActivityLog, Review],
         synchronize: config.get('NODE_ENV') !== 'production',
         ssl:
-          config.get('NODE_ENV') === 'production' || config.get<string>('DATABASE_URL')?.includes('supabase.co')
+          config.get('NODE_ENV') === 'production' || config.get<string>('DATABASE_URL')?.includes('supabase')
             ? { rejectUnauthorized: false }
             : false,
       }),
