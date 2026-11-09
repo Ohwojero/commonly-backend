@@ -135,7 +135,7 @@ const defaultCategories = [
   {
     slug: 'awards',
     label: 'Awards',
-    eyebrow: 'The Commonly awards',
+    eyebrow: 'The Commonlys awards',
     title: 'The things we would buy again.',
     description: 'Our highest-conviction picks, recognized for doing one thing exceptionally well.',
     image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1400&q=85',

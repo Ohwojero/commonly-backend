@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Product } from './product.entity'
@@ -13,6 +13,8 @@ const toSlug = (str: string) =>
 
 @Injectable()
 export class ProductsService {
+  private readonly logger = new Logger(ProductsService.name)
+
   constructor(
     @InjectRepository(Product) private repo: Repository<Product>,
     @InjectRepository(Subcategory) private subcategoryRepo: Repository<Subcategory>,
@@ -93,7 +95,15 @@ export class ProductsService {
             image: cat.image,
             category: cat,
           })
-          await this.subcategoryRepo.save(sub)
+          try {
+            await this.subcategoryRepo.save(sub)
+          } catch (err: any) {
+            this.logger.warn(`Could not save new subcategory "${subcategorySlug}": ${err?.message}`)
+            sub = await this.subcategoryRepo.findOne({
+              where: { slug: subcategorySlug },
+              relations: ['category'],
+            })
+          }
         }
       }
       if (sub) return sub
@@ -114,7 +124,11 @@ export class ProductsService {
           image: cat.image,
           category: cat,
         })
-        return this.subcategoryRepo.save(defaultSub)
+        try {
+          return await this.subcategoryRepo.save(defaultSub)
+        } catch {
+          return this.subcategoryRepo.findOne({ where: { slug: `${cat.slug}-curations` } })
+        }
       }
     }
 
@@ -122,13 +136,33 @@ export class ProductsService {
   }
 
   async create(dto: CreateProductDto) {
-    const { subcategorySlug, categorySlug, subcategoryLabel, ...productData } = dto
+    const { subcategorySlug, categorySlug, subcategoryLabel, rating, reviews, ...productData } = dto
 
-    if (productData.isSpotlight) {
-      await this.repo.update({}, { isSpotlight: false })
+    // Check for existing slug to prevent unhandled database 500 error
+    const existing = await this.repo.findOne({ where: { slug: productData.slug } })
+    if (existing) {
+      throw new ConflictException(`A product with the slug "${productData.slug}" already exists. Please choose a different name or slug.`)
     }
 
-    const product = this.repo.create(productData)
+    // Safely reset any other spotlight product without using empty criteria update({})
+    if (productData.isSpotlight) {
+      await this.repo.createQueryBuilder()
+        .update(Product)
+        .set({ isSpotlight: false })
+        .where('isSpotlight = :curr', { curr: true })
+        .execute()
+    }
+
+    const product = this.repo.create({
+      ...productData,
+      images: productData.images ?? [],
+      highlights: productData.highlights ?? [],
+      itemDetails: productData.itemDetails ?? [],
+      specs: productData.specs ?? [],
+      tags: productData.tags ?? [],
+      views: productData.views ?? 0,
+      price: productData.price ?? 0,
+    })
 
     const sub = await this.resolveSubcategory(subcategorySlug, categorySlug, subcategoryLabel)
     if (sub) {
@@ -140,11 +174,30 @@ export class ProductsService {
   }
 
   async update(slug: string, dto: Partial<CreateProductDto>) {
-    const product = await this.findBySlug(slug)
-    const { subcategorySlug, categorySlug, subcategoryLabel, ...productData } = dto
+    // Fetch raw TypeORM entity instance (not augmented with review stats)
+    const product = await this.repo.findOne({
+      where: { slug },
+      relations: ['subcategory', 'subcategory.category'],
+    })
+    if (!product) throw new NotFoundException(`Product "${slug}" not found`)
 
+    const { subcategorySlug, categorySlug, subcategoryLabel, rating, reviews, ...productData } = dto
+
+    // If slug is changing, verify target slug is not already taken
+    if (productData.slug && productData.slug !== slug) {
+      const existing = await this.repo.findOne({ where: { slug: productData.slug } })
+      if (existing) {
+        throw new ConflictException(`A product with the slug "${productData.slug}" already exists. Please choose a different slug.`)
+      }
+    }
+
+    // Safely reset existing spotlights
     if (productData.isSpotlight) {
-      await this.repo.update({}, { isSpotlight: false })
+      await this.repo.createQueryBuilder()
+        .update(Product)
+        .set({ isSpotlight: false })
+        .where('isSpotlight = :curr AND id != :id', { curr: true, id: product.id })
+        .execute()
     }
 
     Object.assign(product, productData)
@@ -157,11 +210,12 @@ export class ProductsService {
     }
 
     await this.repo.save(product)
-    return this.findBySlug(slug)
+    return this.findBySlug(product.slug)
   }
 
   async remove(slug: string) {
-    const product = await this.findBySlug(slug)
+    const product = await this.repo.findOne({ where: { slug } })
+    if (!product) throw new NotFoundException(`Product "${slug}" not found`)
     return this.repo.remove(product)
   }
 }
