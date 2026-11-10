@@ -74,9 +74,9 @@ const defaultCategories = [
       'Active Posture Stools',
       'Solid Wood Desk Tops',
       'Motorized Standing Frames',
-      'Heavy-Duty Monitor Arm Mounts',
       'Ergonomic Vertical Mice',
-      'Custom Mechanical Keyboards',
+      'Smart Portable EV Charging Systems',
+      '4K AI Smart Dash Cams',
     ],
   },
   {
@@ -366,6 +366,16 @@ async function seed() {
       subcategoryMap[subSlug] = sub
     }
   }
+
+  const removedKeyboardSubcategory = await subRepo.findOne({
+    where: { slug: toSlug('Custom Mechanical Keyboards'), category: { slug: 'ergonomic-edit' } },
+  })
+  if (removedKeyboardSubcategory) await subRepo.remove(removedKeyboardSubcategory)
+
+  const removedMonitorArmSubcategory = await subRepo.findOne({
+    where: { slug: toSlug('Heavy-Duty Monitor Arm Mounts'), category: { slug: 'ergonomic-edit' } },
+  })
+  if (removedMonitorArmSubcategory) await subRepo.remove(removedMonitorArmSubcategory)
 
   console.log('Seeding initial products...')
   for (const prodData of sampleProducts) {
