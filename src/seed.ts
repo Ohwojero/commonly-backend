@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { DataSource } from 'typeorm'
+import { DataSource, In } from 'typeorm'
 import { config } from 'dotenv'
 import { Category } from './categories/category.entity'
 import { Subcategory } from './categories/subcategory.entity'
@@ -25,22 +25,19 @@ const AppDataSource = new DataSource({
 const defaultCategories = [
   {
     slug: 'personal-edit',
-    label: 'The Personal Edit',
-    eyebrow: 'Ritual & Care',
-    title: 'Quiet luxury self-care & clinical science.',
-    description: 'Clinical skincare, precision treatment tech, molecular bond repair, and fine fragrance for elevated daily rituals.',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-rose-500/10',
+    label: 'The Everyday Tech Edit',
+    eyebrow: 'Connected Living & Mobility',
+    title: 'Smart home, vehicle telematics & precision power systems.',
+    description: 'Curated smart thermostats, 4K wireless security cameras, video doorbells, connected radar telemetry, precision steam ovens, and portable power stations.',
+    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1400&q=85',
+    tone: 'bg-primary/10',
     items: [
-      'High-End Serums',
-      'Anti-Aging Matrices',
-      'Clinical Sun Care',
-      'LED & Microcurrent Devices',
-      'At-Home Laser Systems',
-      'Styling & Drying Tech',
-      'Molecular Bond Repair',
-      'High-End Fragrances',
-      'Luxury Body Oils',
+      'Smart Thermostats',
+      'Smart Doorbells',
+      'Security Cameras',
+      'Escort MAX 360c MKII Connected Radar',
+      'Anova Precision Smart Combi Steam Oven',
+      'EcoFlow DELTA 2 (1024Wh LiFePO4)',
     ],
   },
   {
@@ -68,7 +65,7 @@ const defaultCategories = [
     label: 'The Ergonomic Edit',
     eyebrow: 'Posture & Tactile',
     title: 'Engineered seating, standing desks & tactile layouts.',
-    description: 'Executive task seating, solid hardwood motorized desk systems, and custom mechanical layouts for sustained cognitive flow.',
+    description: 'Executive task seating, solid hardwood motorized desk systems, and heavy-duty monitor arm mounts for peak ergonomic posture and sustained cognitive flow.',
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=85',
     tone: 'bg-secondary',
     items: [
@@ -77,9 +74,9 @@ const defaultCategories = [
       'Active Posture Stools',
       'Solid Wood Desk Tops',
       'Motorized Standing Frames',
-      'Minimalist Leather Desk Pads',
-      'Custom Mechanical Keyboards',
+      'Heavy-Duty Monitor Arm Mounts',
       'Ergonomic Vertical Mice',
+      'Custom Mechanical Keyboards',
     ],
   },
   {
@@ -87,57 +84,17 @@ const defaultCategories = [
     label: 'News',
     eyebrow: 'The latest edit',
     title: 'What is worth knowing now.',
-    description: 'New launches, cultural shifts, and considered finds from the worlds shaping how we live.',
+    description: 'New tech launches, industry shifts, and considered finds from the worlds shaping how we work and move.',
     image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=85',
     tone: 'bg-secondary',
-    items: ['Celebrity', 'New launches', 'Treatment & FDA news', 'Industry & retail news'],
-  },
-  {
-    slug: 'face',
-    label: 'Face',
-    eyebrow: 'The face edit',
-    title: 'Care for the skin you are in.',
-    description: 'Thoughtful routines and proven essentials for every complexion, concern, and daily ritual.',
-    image: 'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-accent/10',
-    items: ['Acne', 'Anti-aging', 'Eye care', 'Hyperpigmentation', 'Makeup', 'Sensitive skin', 'Skin care', 'Skin conditions', 'Smile', 'Sun care'],
-  },
-  {
-    slug: 'treatments',
-    label: 'Treatments',
-    eyebrow: 'The treatment edit',
-    title: 'Research before the ritual.',
-    description: 'A clearer way to understand treatments, devices, ingredients, and what comes next.',
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-primary/10',
-    items: ['Neurotoxins', 'Fillers', 'Lasers & energy devices', 'Microneedling', 'Post-procedure skin care', 'Regenerative aesthetics', 'Skin lifting and tightening'],
-  },
-  {
-    slug: 'body',
-    label: 'Body',
-    eyebrow: 'The body edit',
-    title: 'Good care, from head to toe.',
-    description: 'The products and practices that make everyday body care feel more intentional.',
-    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-secondary',
-    items: ['Skin care', 'Body sculpting', 'Breasts', 'Butts', 'Cellulite', 'Fragrance', 'Hands + nails', 'Legs', 'Pregnancy'],
-  },
-  {
-    slug: 'hair',
-    label: 'Hair',
-    eyebrow: 'The hair edit',
-    title: 'A better hair day starts here.',
-    description: 'Useful guidance for healthier hair, calmer scalps, and routines that fit real life.',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-accent/10',
-    items: ['Bond repair', 'Celebrity hair', 'Dry hair', 'Frizzy hair', 'Gray hair', 'Hair color', 'Hair growth', 'Hair repair', 'Scalp health', 'Tips + tutorials'],
+    items: ['New launches', 'EV & Auto tech news', 'Workspace hardware news', 'Industry & retail news'],
   },
   {
     slug: 'awards',
     label: 'Awards',
     eyebrow: 'The Commonlys awards',
-    title: 'The things we would buy again.',
-    description: 'Our highest-conviction picks, recognized for doing one thing exceptionally well.',
+    title: 'The tech we would buy again.',
+    description: 'Our highest-conviction picks, recognized for doing one thing exceptionally well in performance, build quality, and value.',
     image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1400&q=85',
     tone: 'bg-primary/10',
     items: ['Best in class', 'Editor favorites', 'Reader favorites', 'New and notable'],
@@ -147,146 +104,122 @@ const defaultCategories = [
     label: 'Shopping',
     eyebrow: 'The shopping edit',
     title: 'Buy less. Choose better.',
-    description: 'A focused collection of products selected for usefulness, longevity, and quiet delight.',
+    description: 'A focused collection of tech products selected for performance, longevity, and reliable Amazon Prime value.',
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1400&q=85',
     tone: 'bg-secondary',
-    items: ['Best sellers', 'Under $25', 'Gifts', 'Everyday essentials'],
-  },
-  {
-    slug: 'creams',
-    label: 'Creams',
-    eyebrow: 'The cream edit',
-    title: 'The right cream changes everything.',
-    description: 'From rich body butters to featherlight face creams, discover textures made for every ritual and skin need.',
-    image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1400&q=85',
-    tone: 'bg-accent/10',
-    items: ['Face creams', 'Moisturizers', 'Body creams', 'Night creams', 'Hand creams', 'Natural creams'],
+    items: ['Best sellers', 'Under $100', 'Gifts for tech enthusiasts', 'Everyday carry essentials'],
   },
 ]
 
 const sampleProducts = [
+  // ── THE EVERYDAY TECH EDIT (The 6 Curated Essentials) ──
   {
-    slug: 'eltamd-uv-clear-spf-46',
-    name: 'UV Clear Broad-Spectrum SPF 46',
-    brand: 'EltaMD',
-    categorySlug: 'face',
-    subcategorySlug: 'sun-care',
-    price: 43.00,
-    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=85',
-    description: 'Oil-free transparent sunscreen formulated with high-purity niacinamide to calm blemish-prone and sensitive skin while delivering broad-spectrum UV protection.',
-    tags: ['Sunscreen', 'Dermatologist Recommended', 'Acne-Prone'],
-    affiliateUrl: 'https://www.amazon.com/dp/B002MSN3QQ',
-    isSpotlight: false,
-    views: 1120,
-    highlights: ['Transparent Zinc Oxide 9.0%', 'Calming Actives: 5.0% Niacinamide', 'Silky, weightless finish'],
-    itemDetails: ['Brand: EltaMD', 'Size: 1.7 oz airless pump', 'Broad Spectrum UVA/UVB'],
-    specs: ['Item Form: Lotion', 'Non-comedogenic', 'Fragrance-free'],
-  },
-  {
-    slug: 'supergoop-unseen-sunscreen',
-    name: 'Unseen Sunscreen SPF 40',
-    brand: 'Supergoop!',
-    categorySlug: 'face',
-    subcategorySlug: 'sun-care',
-    price: 38.00,
-    image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1000&q=85',
-    description: 'The original 100% invisible, weightless, scentless daily sunscreen with a velvety primer finish that grips makeup seamlessly all day.',
-    tags: ['Makeup Primer', 'Clean Beauty', 'Reader Favorite'],
-    affiliateUrl: 'https://www.amazon.com/dp/B082TNSCHG',
-    isSpotlight: false,
-    views: 940,
-    highlights: ['Completely clear, pore-blurring primer', 'Broad spectrum SPF 40', 'Reef-Friendly formula'],
-    itemDetails: ['Brand: Supergoop!', 'Size: 1.7 fl oz / 50 ml', 'Form: Clear velvety gel'],
-    specs: ['Water Resistance: 40 minutes', 'Finish: Natural matte'],
-  },
-  {
-    slug: 'nuface-trinity-plus',
-    name: 'Trinity+ Advanced Facial Toning Kit',
-    brand: 'NuFACE',
-    categorySlug: 'treatments',
-    subcategorySlug: 'lasers-energy-devices',
-    price: 395.00,
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1000&q=85',
-    description: 'FDA-cleared smart microcurrent device clinically proven to lift, contour, and tone the facial muscles and neck in 5 minutes a day.',
-    tags: ['FDA Cleared', 'Clinical Tech', 'Facial Sculpting'],
-    affiliateUrl: 'https://www.amazon.com/dp/B0BFBNV66Y',
-    isSpotlight: false,
-    views: 1040,
-    highlights: ['3-depth microcurrent with Boost button', 'Visibly sculpts neck and jawline', 'NuFACE Smart App sync'],
-    itemDetails: ['Brand: NuFACE', 'Model: Trinity+ Smart System', 'FDA-cleared Medical Class II'],
-    specs: ['Rechargeable battery', '1-year warranty'],
-  },
-  {
-    slug: 'omnilux-contour-face',
-    name: 'Contour Face LED Light Therapy Mask',
-    brand: 'Omnilux',
-    categorySlug: 'treatments',
-    subcategorySlug: 'lasers-energy-devices',
-    price: 395.00,
-    image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=1000&q=85',
-    description: 'The gold-standard medical grade flexible silicone LED mask utilizing clinically proven red and near-infrared wavelengths to stimulate collagen synthesis.',
-    tags: ['Medical Grade', 'LED Therapy', 'Collagen Stimulator'],
-    affiliateUrl: 'https://www.amazon.com/dp/B08XJ8P86R',
+    slug: 'ecobee-smart-thermostat-premium',
+    name: 'ecobee Smart Thermostat Premium with SmartSensor & Air Quality Monitor',
+    brand: 'ecobee',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'smart-thermostats',
+    price: 249.99,
+    image: 'https://images.unsplash.com/photo-1545259741-2ea3ebf61fa3?auto=format&fit=crop&w=1000&q=85',
+    description: 'Transform home energy efficiency with high-precision radar occupancy sensing, built-in indoor air quality monitoring, and an included SmartSensor to eliminate hot or cold spots across living zones.',
+    tags: ['Smart Thermostat', 'Air Quality', 'ENERGY STAR'],
+    affiliateUrl: 'https://www.amazon.com/dp/B09XXS4MV7',
     isSpotlight: true,
-    views: 1210,
-    highlights: ['Dual matrix Red (633nm) and Near-Infrared (830nm)', 'Medical CE and FDA cleared', 'Flexible silicone design'],
-    itemDetails: ['Brand: Omnilux Medical', '132 medical-grade LEDs', 'USB rechargeable'],
-    specs: ['Optical Output: 30mW/cm²', 'Auto shut-off at 10 min'],
+    views: 3100,
+    highlights: ['Built-in Air Quality Monitor & Smoke Alarm Detection', 'SmartSensor included to balance hot and cold spots', 'Works with Apple HomeKit, Alexa, Google Assistant'],
+    itemDetails: ['Screen: 4-inch Glass Touch Display (540x540)', 'C-Wire Required: Power Extender Kit Included in Box'],
+    specs: ['Sensory Array: Radar Occupancy, VOC & CO2 Air Quality, Humidity', 'Connectivity: Dual-Band Wi-Fi 2.4/5GHz + Bluetooth'],
   },
   {
-    slug: 'augustinus-bader-the-rich-cream',
-    name: 'The Rich Cream',
-    brand: 'Augustinus Bader',
-    categorySlug: 'creams',
-    subcategorySlug: 'face-creams',
-    price: 290.00,
-    image: 'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1000&q=85',
-    description: 'An intensely luxurious, deeply nourishing cream powered by patented TFC8 technology to support cellular renewal and intensely condition.',
-    tags: ['TFC8 Science', 'Award Winner', 'Clinical Hydration'],
-    affiliateUrl: 'https://www.amazon.com/dp/B07P41S88D',
+    slug: 'ring-video-doorbell-pro-2',
+    name: 'Ring Video Doorbell Pro 2 — 1536p HD Head-to-Toe Video with 3D Motion Detection',
+    brand: 'Ring',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'smart-doorbells',
+    price: 249.99,
+    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1000&q=85',
+    description: 'Premium wired doorbell camera featuring 1536p HD Head-to-Toe video that lets you see packages on your doorstep. Powered by 3D Motion Detection with radar-guided Bird\'s Eye View tracking.',
+    tags: ['Video Doorbell', 'Head-to-Toe HD', '3D Radar Detection'],
+    affiliateUrl: 'https://www.amazon.com/dp/B086Q54K53',
     isSpotlight: false,
-    views: 1140,
-    highlights: ['Proprietary TFC8 (Trigger Factor Complex)', 'Rich, emollient balm-cream texture', 'Reduces fine lines and redness'],
-    itemDetails: ['Brand: Augustinus Bader', 'Size: 50ml / 1.7 fl oz', 'Recyclable packaging'],
-    specs: ['Use: Morning and night', 'Dermatologist tested'],
+    views: 3450,
+    highlights: ['Head-to-Toe 1536p HD Video with color night vision', '3D Motion Detection with Bird\'s Eye View radar mapping', 'Two-way talk with Audio+ noise cancellation'],
+    itemDetails: ['Power: Hardwired (16-24 VAC doorbell transformer)', 'Field of View: 150° Horizontal, 150° Vertical'],
+    specs: ['Resolution: 1536p HD Video', 'Audio: Two-Way Audio with Audio+'],
   },
   {
-    slug: 'baccarat-rouge-540-extrait',
-    name: 'Baccarat Rouge 540 Extrait de Parfum',
-    brand: 'Maison Francis Kurkdjian',
-    categorySlug: 'body',
-    subcategorySlug: 'fragrance',
-    price: 465.00,
-    image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=85',
-    description: 'An exalted interpretation of the legendary fragrance, amplifying the radiance of Egyptian Grandiflorum jasmine, bitter almond, and ambergris.',
-    tags: ['Haute Parfumerie', 'Iconic Sillage', 'Prestige Luxury'],
-    affiliateUrl: 'https://www.amazon.com/dp/B071DX343W',
+    slug: 'eufycam-s330-4k-solar-security-system',
+    name: 'eufy Security eufyCam S330 (eufyCam 3) 4K Wireless Solar Security System (2-Cam Kit)',
+    brand: 'eufy Security',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'security-cameras',
+    price: 469.99,
+    image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1000&q=85',
+    description: '4K Ultra HD wireless security camera kit with integrated Forever Power solar panels requiring just 2 hours of direct sunlight per day. Local BionicMind AI facial recognition filters out family from strangers with zero monthly fees.',
+    tags: ['4K Solar Security', 'BionicMind AI', 'Zero Monthly Fees'],
+    affiliateUrl: 'https://www.amazon.com/dp/B0B1L4GZQJ',
     isSpotlight: false,
-    views: 1510,
-    highlights: ['Egyptian jasmine, bitter almond, ambergris', 'Extrait de Parfum high concentration', 'Enduring 16+ hour longevity'],
-    itemDetails: ['Brand: Maison Francis Kurkdjian', 'Size: 70ml / 2.4 fl oz', 'Made in France'],
-    specs: ['Family: Amber Floral Woody', 'Gender: Unisex'],
+    views: 2900,
+    highlights: ['4K Ultra HD detail with Forever Power solar panel', 'BionicMind AI facial recognition filters non-threats', 'Expandable local storage up to 16TB — zero monthly fees'],
+    itemDetails: ['Included: 2x eufyCam S330 Cameras + 1x HomeBase 3', 'Battery: 13,000mAh with Integrated Solar Panel'],
+    specs: ['Weather Resistance: IP67 Waterproof', 'Storage: 16GB EMMC on HomeBase 3, Expandable via 2.5" HDD/SSD'],
   },
   {
-    slug: 'caldigit-ts4-thunderbolt-4-dock',
-    name: 'TS4 Thunderbolt 4 18-Port Enterprise Dock',
-    brand: 'CalDigit',
-    categorySlug: 'studio-edit',
-    subcategorySlug: 'enterprise-docking-stations',
-    price: 399.95,
-    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1000&q=85',
-    description: 'The industry benchmark for developer workstations. 18 ports of extreme connectivity with 98W Power Delivery, UHS-II SD cards, and 2.5 Gigabit Ethernet.',
-    tags: ['Thunderbolt 4', 'Developer Setup', '98W Power Delivery'],
-    affiliateUrl: 'https://www.amazon.com/dp/B09GK8PTB7',
-    isSpotlight: true,
-    views: 1840,
-    highlights: ['18 Ports of expansion', '98W Host Power Delivery', '2.5GbE Ethernet'],
-    itemDetails: ['Brand: CalDigit', 'Model: TS4-US-AMZ', 'Color: Space Gray Aluminum'],
-    specs: ['Interface: Thunderbolt 4', 'Max Resolution: Up to Single 8K or Dual 6K 60Hz'],
+    slug: 'escort-max-360c-mkii-radar',
+    name: 'Escort MAX 360c MKII Connected Laser Radar Detector',
+    brand: 'Escort',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'escort-max-360c-mkii-connected-radar',
+    price: 699.95,
+    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1000&q=85',
+    description: 'The benchmark in vehicle situational intelligence. 360° directional arrow threat detection, dual-antenna BlackFin DSP processor, AutoLearn AI false alert filtering, and live shared radar telemetry via connected cloud Wi-Fi.',
+    tags: ['360 Telematics', 'AutoLearn AI', 'Connected Radar'],
+    affiliateUrl: 'https://www.amazon.com/dp/B0BH32N66L',
+    isSpotlight: false,
+    views: 2200,
+    highlights: ['360° Directional Arrows pinpoint threat source instantly', 'AutoLearn AI uses GPS to eliminate false alerts over time', 'Built-in Wi-Fi connects to Escort Live community alerts'],
+    itemDetails: ['Processor: BlackFin 547 DSP', 'Display: Multi-Color OLED Graphic'],
+    specs: ['Radar Coverage: X, K, Ka, SuperWide, Laser', 'GPS: TrueLock & Speed Camera Database'],
   },
+  {
+    slug: 'anova-precision-oven-combi-steam',
+    name: 'Anova Precision Smart Combi Steam Oven with WiFi & App Control',
+    brand: 'Anova',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'anova-precision-smart-combi-steam-oven',
+    price: 699.99,
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1000&q=85',
+    description: 'Professional combi steam cooking brought to the countertop. Sous-vide without the bag via precision temperature and wet-bulb humidity sensors. Dual-band WiFi with mobile app multi-stage cook recipes.',
+    tags: ['Combi Steam', 'Bagless Sous-Vide', 'WiFi Smart'],
+    affiliateUrl: 'https://www.amazon.com/dp/B08HR9KMSZ',
+    isSpotlight: false,
+    views: 2400,
+    highlights: ['Bagless sous-vide mode with wet-bulb humidity control', 'Continuous steam injection from external 1.3L water tank', 'Multipoint food probe with app graph monitoring'],
+    itemDetails: ['Capacity: 1.2 cu ft (fits a 12lb turkey)', 'Connectivity: Wi-Fi 2.4 GHz iOS/Android App'],
+    specs: ['Temp Range: 77°F–482°F (25°C–250°C)', 'Heating: 5 Independent Heating Elements'],
+  },
+  {
+    slug: 'ecoflow-delta-2-power-station',
+    name: 'EcoFlow DELTA 2 Smart Portable Power Station — 1024Wh LiFePO4 1800W',
+    brand: 'EcoFlow',
+    categorySlug: 'personal-edit',
+    subcategorySlug: 'ecoflow-delta-2-1024wh-lifepo4',
+    price: 699.00,
+    image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=1000&q=85',
+    description: 'High-output 1024Wh LiFePO4 smart portable energy system. 1800W pure sine wave AC output (2700W surge) to power 90% of home appliances and studio workstations. 0-80% ultra-fast X-Stream charging in just 50 minutes with full app telemetry.',
+    tags: ['LiFePO4 Battery', '1800W Pure Sine', 'X-Stream Fast Charge'],
+    affiliateUrl: 'https://www.amazon.com/dp/B0B9X3R7PN',
+    isSpotlight: false,
+    views: 3150,
+    highlights: ['LiFePO4 Chemistry: 3,000+ full cycles to 80% capacity', '1800W AC output powers 15 devices simultaneously', '0 to 80% recharge in 50 minutes via AC wall outlet'],
+    itemDetails: ['Capacity: 1024Wh (Expandable to 3040Wh)', 'Outputs: 6x AC Outlets, 2x USB-C 100W PD'],
+    specs: ['Solar Input: Up to 500W (11-60V)', 'App Control: Wi-Fi & Bluetooth App Monitoring'],
+  },
+
+  // ── THE STUDIO EDIT ──
   {
     slug: 'dell-ultrasharp-40-curved-5k',
-    name: 'UltraSharp 40" Curved WUHD 5K Monitor (U4025QW)',
+    name: 'Dell UltraSharp 40" Curved WUHD 5K Monitor (U4025QW)',
     brand: 'Dell',
     categorySlug: 'studio-edit',
     subcategorySlug: 'ultra-wide-screens',
@@ -302,6 +235,23 @@ const sampleProducts = [
     specs: ['Panel Type: IPS Black', 'Connectivity: Thunderbolt 4 (140W PD)'],
   },
   {
+    slug: 'caldigit-ts4-thunderbolt-4-dock',
+    name: 'TS4 Thunderbolt 4 18-Port Enterprise Dock',
+    brand: 'CalDigit',
+    categorySlug: 'studio-edit',
+    subcategorySlug: 'enterprise-docking-stations',
+    price: 399.95,
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1000&q=85',
+    description: 'The industry benchmark for developer workstations. 18 ports of extreme connectivity with 98W Power Delivery, UHS-II SD cards, and 2.5 Gigabit Ethernet.',
+    tags: ['Thunderbolt 4', 'Developer Setup', '98W Power Delivery'],
+    affiliateUrl: 'https://www.amazon.com/dp/B09GK8PTB7',
+    isSpotlight: false,
+    views: 1840,
+    highlights: ['18 Ports of expansion', '98W Host Power Delivery', '2.5GbE Ethernet'],
+    itemDetails: ['Brand: CalDigit', 'Model: TS4-US-AMZ', 'Color: Space Gray Aluminum'],
+    specs: ['Interface: Thunderbolt 4', 'Max Resolution: Up to Single 8K or Dual 6K 60Hz'],
+  },
+  {
     slug: 'herman-miller-aeron-chair',
     name: 'Aeron Ergonomic Task Chair (Graphite)',
     brand: 'Herman Miller',
@@ -312,28 +262,11 @@ const sampleProducts = [
     description: 'The defining icon of ergonomic seating. Pellicle 8Z breathable elastomer suspension distributes weight evenly, while PostureFit SL supports the sacrum and spine.',
     tags: ['Ergonomic Icon', 'Herman Miller', 'PostureFit SL'],
     affiliateUrl: 'https://www.amazon.com/dp/B0735BPB58',
-    isSpotlight: true,
+    isSpotlight: false,
     views: 3100,
     highlights: ['Pellicle 8Z zone-calibrated suspension', 'Fully adjustable arms & PostureFit SL', 'Engineered in the USA'],
     itemDetails: ['Brand: Herman Miller', 'Color: Graphite Frame & Mesh', 'Size: Size B (Medium)'],
     specs: ['Weight Capacity: 350 lbs', 'Warranty: 12-Year Official Coverage'],
-  },
-  {
-    slug: 'keychron-q1-pro-wireless-custom',
-    name: 'Keychron Q1 Pro QMK/VIA Wireless Custom Keyboard',
-    brand: 'Keychron',
-    categorySlug: 'ergonomic-edit',
-    subcategorySlug: 'custom-mechanical-keyboards',
-    price: 219.99,
-    image: 'https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=1000&q=85',
-    description: 'A full CNC machined 75% aluminum mechanical keyboard with double-gasket acoustic mounting, hot-swappable switches, and fully programmable QMK/VIA open firmware.',
-    tags: ['Mechanical Keyboard', 'Double Gasket', 'QMK/VIA'],
-    affiliateUrl: 'https://www.amazon.com/dp/B0BS5V43W6',
-    isSpotlight: false,
-    views: 1420,
-    highlights: ['6063 Aluminum CNC Body', 'Double Gasket Mount Sound Absorption', 'Bluetooth 5.1 & Type-C Wired'],
-    itemDetails: ['Brand: Keychron', 'Layout: 75%', 'Keycaps: KSA Profile Double-Shot PBT'],
-    specs: ['Hot-swappable: 3-pin & 5-pin MX', 'Battery: 4000mAh'],
   },
 ]
 
@@ -344,6 +277,48 @@ async function seed() {
   const catRepo = AppDataSource.getRepository(Category)
   const subRepo = AppDataSource.getRepository(Subcategory)
   const prodRepo = AppDataSource.getRepository(Product)
+
+  // 1. Clean up legacy beauty products & obsolete slugs
+  const obsoleteSlugs = [
+    'omnilux-contour-face',
+    'eltamd-uv-clear-spf-46',
+    'supergoop-unseen-sunscreen',
+    'nuface-trinity-plus',
+    'augustinus-bader-the-rich-cream',
+    'baccarat-rouge-540-extrait',
+    'carlinkit-5-wireless-carplay-adapter',
+    'fanttik-x8-apex-smart-tire-inflator',
+    'rove-r2-4k-dual-dash-cam',
+    'garmin-dash-cam-67w',
+    '70mai-a800s-4k-dual-dash-cam',
+    'blink-ev-charger-level2-48a',
+    'wallbox-pulsar-plus-ev-charger',
+    'schumacher-level-2-portable-ev-charger',
+    'fellow-stagg-ekg-pro-studio',
+    'breville-barista-express-impress',
+    'anker-solix-c300-portable-power-station',
+    'anova-precision-cooker-3-wifi',
+    'keychron-q1-pro-wireless-custom',
+    'logitech-mx-master-3s',
+    'vantrue-n4-pro-4k-dash-cam',
+    'tesla-universal-wall-connector',
+    'blackvue-dr970x-2ch-plus-4k',
+    'breville-barista-touch-impress',
+    'chargepoint-home-flex-50a',
+  ]
+
+  console.log('Cleaning up obsolete products...')
+  await prodRepo.delete({ slug: In(obsoleteSlugs) }).catch((err) => {
+    console.warn('Cleanup warning:', err.message)
+  })
+
+  // Clear spotlight on any remaining items
+  await prodRepo
+    .createQueryBuilder()
+    .update(Product)
+    .set({ isSpotlight: false })
+    .execute()
+    .catch(() => {})
 
   console.log('Seeding categories and subcategories...')
   const subcategoryMap: Record<string, Subcategory> = {}
@@ -361,6 +336,14 @@ async function seed() {
         tone: catData.tone,
       })
       cat = await catRepo.save(cat)
+    } else {
+      cat.label = catData.label
+      cat.eyebrow = catData.eyebrow
+      cat.title = catData.title
+      cat.description = catData.description
+      cat.image = catData.image
+      cat.tone = catData.tone
+      cat = await catRepo.save(cat)
     }
 
     for (const item of catData.items) {
@@ -374,6 +357,11 @@ async function seed() {
           category: cat,
         })
         sub = await subRepo.save(sub)
+      } else {
+        sub.label = item
+        sub.image = cat.image
+        sub.category = cat
+        sub = await subRepo.save(sub)
       }
       subcategoryMap[subSlug] = sub
     }
@@ -381,10 +369,11 @@ async function seed() {
 
   console.log('Seeding initial products...')
   for (const prodData of sampleProducts) {
-    const existing = await prodRepo.findOne({ where: { slug: prodData.slug } })
-    if (!existing) {
-      const sub = subcategoryMap[prodData.subcategorySlug] || (await subRepo.findOne({ where: { slug: prodData.subcategorySlug } }))
-      const product = prodRepo.create({
+    let product = await prodRepo.findOne({ where: { slug: prodData.slug } })
+    const sub = subcategoryMap[prodData.subcategorySlug] || (await subRepo.findOne({ where: { slug: prodData.subcategorySlug } }))
+    
+    if (!product) {
+      product = prodRepo.create({
         slug: prodData.slug,
         name: prodData.name,
         brand: prodData.brand,
@@ -400,11 +389,25 @@ async function seed() {
         specs: prodData.specs,
         subcategory: sub || undefined,
       })
-      await prodRepo.save(product)
+    } else {
+      product.name = prodData.name
+      product.brand = prodData.brand
+      product.price = prodData.price
+      product.image = prodData.image
+      product.description = prodData.description
+      product.tags = prodData.tags
+      product.affiliateUrl = prodData.affiliateUrl
+      product.isSpotlight = prodData.isSpotlight
+      product.views = prodData.views
+      product.highlights = prodData.highlights
+      product.itemDetails = prodData.itemDetails
+      product.specs = prodData.specs
+      if (sub) product.subcategory = sub
     }
+    await prodRepo.save(product)
   }
 
-  console.log('Seeding complete! Categories, subcategories, and products are populated.')
+  console.log('Seeding complete! Cleaned old products and populated 6 Everyday Tech products.')
   await AppDataSource.destroy()
 }
 
