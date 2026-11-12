@@ -27,8 +27,8 @@ const defaultCategories = [
     slug: 'personal-edit',
     label: 'The Everyday Tech Edit',
     eyebrow: 'Connected Living & Mobility',
-    title: 'Smart home, vehicle telematics & precision power systems.',
-    description: 'Curated smart thermostats, 4K wireless security cameras, video doorbells, connected radar telemetry, precision steam ovens, and portable power stations.',
+    title: 'Smart home, connected vehicle tech & premium kitchen appliances.',
+    description: 'Curated smart home security, connected vehicle tech, premium coffee makers, blenders, and food processors.',
     image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1400&q=85',
     tone: 'bg-primary/10',
     items: [
@@ -37,7 +37,10 @@ const defaultCategories = [
       'Security Cameras',
       'Escort MAX 360c MKII Connected Radar',
       'Anova Precision Smart Combi Steam Oven',
-      'EcoFlow DELTA 2 (1024Wh LiFePO4)',
+      'Breville Barista Touch Impress',
+      'Jura E8 Automatic Coffee Maker',
+      'Vitamix Ascent Series',
+      'Robot Coupe Food Processors',
     ],
   },
   {
@@ -74,7 +77,6 @@ const defaultCategories = [
       'Active Posture Stools',
       'Solid Wood Desk Tops',
       'Motorized Standing Frames',
-      'Ergonomic Vertical Mice',
       'Smart Portable EV Charging Systems',
       '4K AI Smart Dash Cams',
     ],
@@ -376,6 +378,16 @@ async function seed() {
     where: { slug: toSlug('Heavy-Duty Monitor Arm Mounts'), category: { slug: 'ergonomic-edit' } },
   })
   if (removedMonitorArmSubcategory) await subRepo.remove(removedMonitorArmSubcategory)
+
+  const removedVerticalMouseSubcategory = await subRepo.findOne({
+    where: { slug: toSlug('Ergonomic Vertical Mice'), category: { slug: 'ergonomic-edit' } },
+  })
+  if (removedVerticalMouseSubcategory) await subRepo.remove(removedVerticalMouseSubcategory)
+
+  const removedEcoFlowSubcategory = await subRepo.findOne({
+    where: { slug: 'ecoflow-delta-2-1024wh-lifepo4', category: { slug: 'personal-edit' } },
+  })
+  if (removedEcoFlowSubcategory) await subRepo.remove(removedEcoFlowSubcategory)
 
   console.log('Seeding initial products...')
   for (const prodData of sampleProducts) {
